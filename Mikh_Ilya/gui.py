@@ -1,5 +1,5 @@
 import dearpygui.dearpygui as dpg
-from point import Point
+from vector import Vector
 
 dpg.create_context()
 dpg.create_viewport(title='Fractals', width=700, height=700)
@@ -25,8 +25,8 @@ def update():
     
     level = dpg.get_value("level")
     size = dpg.get_value("size")
-    P = Point((500 - size) / 2, 250 + size * (3) ** (1/2) / 6)
-    D = Point(size / (3 ** level), 0)
+    P = Vector((500 - size) / 2, 250 + size * (3) ** (1/2) / 6)
+    D = Vector(size / (3 ** level), 0)
     Tags = []
     
     for i in range(3):

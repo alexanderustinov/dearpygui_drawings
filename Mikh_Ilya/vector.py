@@ -1,6 +1,6 @@
 from math import cos, sin, pi
 
-class Point:
+class Vector:
     
     def __init__(self, x, y):
         self.x = x
