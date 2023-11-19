@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "fractal"
+version = "0.0.1"
+description = ""
+authors = ["Your Name <you@example.com>"]
+license = "n"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+dearpygui = "^1.10.1"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
