@@ -4,4 +4,4 @@
 
 ### Istall & Run
 `poetry build`
-`poetry run python3 -m xd_fractal`
+`poetry run python3 -m fractal`
