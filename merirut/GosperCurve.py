@@ -36,7 +36,7 @@ def draw_gosper(drawlist, instructions, length, angle, start_x, start_y, text_co
             delta_time = 1000 * dpg.get_delta_time()
             elapsed_time = 1000 * (timer() - start_time)
             start_time = timer()
-            dpg.set_value(text_container, f"Delta time: {delta_time:.2f} ms / Time between on_render calls: {elapsed_time:.2f} ms")
+            dpg.set_value(text_container, f"Delta time: {delta_time:.2f} ms / Time between draw_line calls: {elapsed_time:.2f} ms")
             sleep(0.0005)
 
             x, y = new_x, new_y
@@ -62,6 +62,7 @@ def main():
 
     dpg.create_context()
     dpg.create_viewport()
+    dpg.set_viewport_vsync(False)
     dpg.show_viewport()
     dpg.setup_dearpygui()
 
