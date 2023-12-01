@@ -1,5 +1,8 @@
 import dearpygui.dearpygui as dpg
+import math
+from timeit import default_timer as timer
 
+start_time = timer()
 
 def dragon(x1, y1, x2, y2, depth, canvas):
     def paint(x1, y1, x2, y2, k):
@@ -13,17 +16,30 @@ def dragon(x1, y1, x2, y2, depth, canvas):
 
     paint(x1, y1, x2, y2, depth)
 
-
 dpg.create_context()
-dpg.create_viewport()
+dpg.create_viewport(title='Dragon Curve', width=750, height=750, vsync=False)
+
+fps_text = dpg.generate_uuid()
+dragon_depth = 14
+
+with dpg.window(tag="Window"):
+    dpg.add_text("FPS: ", tag=fps_text)
+    with dpg.drawlist(width=750, height=750):
+        dragon(50, 350, 650, 350, dragon_depth, dpg.last_item())
+
+dpg.set_primary_window("Window", True)
 dpg.setup_dearpygui()
-
-with dpg.window(label="Dragon Curve", width=750, height=750):
-    with dpg.drawlist(width=700, height=700):
-        dragon(50, 350, 650, 350, 14, dpg.last_item())
-
 dpg.show_viewport()
+
+frame_count = 0
 while dpg.is_dearpygui_running():
     dpg.render_dearpygui_frame()
+    frame_count += 1
+    elapsed_time = timer() - start_time
+    if elapsed_time > 1.0:
+        fps = frame_count / elapsed_time
+        dpg.set_value(fps_text, f"FPS: {fps:.2f}")
+        start_time = timer()
+        frame_count = 0
 
 dpg.destroy_context()
