@@ -1,7 +1,6 @@
 import dearpygui.dearpygui as dpg
 import math
 from timeit import default_timer as timer
-from time import sleep
 
 
 def apply_rules(ch):
@@ -20,11 +19,10 @@ def generate_gosper(axiom, iterations):
     return result
 
 
-def draw_gosper(drawlist, instructions, length, angle, start_x, start_y, text_container):
+def draw_gosper(drawlist, instructions, length, angle, start_x, start_y, text_container, frame_count):
     x, y = start_x, start_y
     direction = 90
     stack = []
-    start_time = timer()
 
     for command in instructions:
         if command == 'A' or command == 'B':
@@ -32,12 +30,6 @@ def draw_gosper(drawlist, instructions, length, angle, start_x, start_y, text_co
             new_y = y + length * math.sin(math.radians(direction))
 
             dpg.draw_line([x, y], [new_x, new_y], parent=drawlist, color=[255, 255, 255])
-
-            delta_time = 1000 * dpg.get_delta_time()
-            elapsed_time = 1000 * (timer() - start_time)
-            start_time = timer()
-            dpg.set_value(text_container, f"Delta time: {delta_time:.2f} ms / Time between draw_line calls: {elapsed_time:.2f} ms")
-            sleep(0.0005)
 
             x, y = new_x, new_y
         elif command == '+':
@@ -66,14 +58,24 @@ def main():
     dpg.show_viewport()
     dpg.setup_dearpygui()
 
+    frame_count = 0
+    start_time = timer()
+
     with dpg.window(label="Gosper Curve", width=800, height=800):
-        text_container = dpg.add_text("Time between draw_line calls: 0.000000 seconds")
+        text_container = dpg.add_text("FPS: ")
 
         with dpg.drawlist(width=700, height=700):
-            draw_gosper(dpg.last_item(), instructions, length, angle, start_x, start_y, text_container)
+            draw_gosper(dpg.last_item(), instructions, length, angle, start_x, start_y, text_container, frame_count)
 
     while dpg.is_dearpygui_running():
         dpg.render_dearpygui_frame()
+        frame_count += 1
+        elapsed_time = timer() - start_time
+        if elapsed_time > 1.0:
+            fps = frame_count / elapsed_time
+            dpg.set_value(text_container, f"FPS: {fps:.2f}")
+            start_time = timer()
+            frame_count = 0
 
     dpg.destroy_context()
 
