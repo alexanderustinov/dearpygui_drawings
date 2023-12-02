@@ -14,8 +14,8 @@ def draw():
         def coch(n):
             if n == 0:
                 dpg.draw_line(P.toTuple(), P.sum(D).toTuple(),
-                            color=(dpg.get_value("R"), dpg.get_value("G"), dpg.get_value("B"), 255),
-                            thickness=dpg.get_value("thickness"))
+                            color=(255, 0, 0, 255),
+                            thickness=1)
             else:
                 for angle in [0, 60, -120, 60]:
                     D.turn(angle)
@@ -51,10 +51,6 @@ with dpg.window(label="Koch's snowflake", tag="window"):
     on_render()
     dpg.add_slider_int(label="Level", min_value=0, max_value=5, default_value=3, tag="level")
     dpg.add_slider_int(label="Size", min_value=50, max_value=400, default_value=300, tag="size")
-    dpg.add_slider_float(label="Thickness", min_value=1, max_value=5, default_value=1, tag="thickness")
-    dpg.add_slider_float(label="Red", min_value=0, max_value=255, default_value=255, tag="R")
-    dpg.add_slider_float(label="Green", min_value=0, max_value=255, default_value=0, tag="G")
-    dpg.add_slider_float(label="Blue", min_value=0, max_value=255, default_value=0, tag="B")
 
     Tag = [None, "drawlist"]
     draw()
