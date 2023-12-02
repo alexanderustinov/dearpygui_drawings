@@ -1,5 +1,6 @@
 import dearpygui.dearpygui as dpg
 import numpy as np
+import time
 
 MAX_ITER = 50
 TOLERANCE = 1e-6
@@ -35,16 +36,33 @@ def draw_fractal(width, height):
                 dpg.draw_circle((x, y), 1, color=color)
 
 
+def on_render(frame_count, last_fps_update_time):
+    frame_count += 1
+    current_time = time.time()
+    if current_time - last_fps_update_time > 1.0:
+        fps = frame_count / (current_time - last_fps_update_time)
+        dpg.set_viewport_title(f'Newton Fractal,   {fps:.2f}')
+        frame_count = 0
+        last_fps_update_time = current_time
+    return frame_count, last_fps_update_time
+
+
 dpg.create_context()
+dpg.create_viewport(title='Newton Fractal', width=800, height=600)
+dpg.set_viewport_vsync(False)
+dpg.setup_dearpygui()
 
 with dpg.window(label='Newton Fractal', width=800, height=600):
     with dpg.drawlist(width=800, height=600):
         draw_fractal(800, 600)
 
-dpg.create_viewport(title='Newton Fractal', width=800, height=600)
-
-dpg.setup_dearpygui()
 dpg.show_viewport()
-dpg.start_dearpygui()
+
+frame_count = 0
+last_fps_update_time = time.time()
+
+while dpg.is_dearpygui_running():
+    frame_count, last_fps_update_time = on_render(frame_count, last_fps_update_time)
+    dpg.render_dearpygui_frame()
 
 dpg.destroy_context()
