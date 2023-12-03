@@ -1,6 +1,9 @@
 import numpy as np
 import dearpygui.dearpygui as dpg
 
+from timeit import default_timer as timer
+
+start_time = timer()
 
 def is_correct(num, num__of_iterations=20):
     z = 0
@@ -28,6 +31,7 @@ c = candidate_values(-2, 0.7, -1.2, 1.2, pixel_density=128)
 dpg.create_context()
 
 with dpg.window(label="Fractal"):
+    fps_count = dpg.add_text("FPS: ")
     # create plot
     with dpg.plot(label="Mandelbrot set", height=600, width=700):
 
@@ -39,8 +43,19 @@ with dpg.window(label="Fractal"):
                     dpg.add_plot_annotation(default_value=(idx.real, idx.imag), color=[0, 0, 0])
 
 
-dpg.create_viewport(title='HW7', width=700, height=650)
+dpg.create_viewport(title='HW7', width=700, height=650, vsync=False)
 dpg.setup_dearpygui()
 dpg.show_viewport()
-dpg.start_dearpygui()
+
+frame_count = 0
+while dpg.is_dearpygui_running():
+    dpg.render_dearpygui_frame()
+    frame_count += 1
+    elapsed_time = timer() - start_time
+    if elapsed_time > 1.0:
+        fps = frame_count / elapsed_time
+        dpg.set_value(fps_count, f"FPS: {fps:.2f}")
+        start_time = timer()
+        frame_count = 0
+
 dpg.destroy_context()
